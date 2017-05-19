@@ -1,0 +1,67 @@
+/* 
+============================================================================  
+    Environment
+    1. Eclipse 4.6.1 in Windows 7 64bit
+    2. gradle-3.4.1
+       
+       
+    Setup in Development Machine
+    1. install JDK, and setup JAVA_HOME
+    2. install gradle, and setup gradle\bin in PATH
+
+
+    Config 
+    1. by command
+            gradle eclipse                   # generate library for eclipse
+    2. by eclpse
+            right click project, Gradle > Refresh Gradle Project
+      
+    Run    
+    1. Open a command prompt in the project path
+    2. gradle clean             
+    3. gradle test 
+    4. gradle build --refresh-dependencies      // allows to refresh remote repository dependencies
+    6. gradle clean test build  
+        
+============================================================================
+*/
+
+apply plugin: "java"
+apply plugin: "eclipse"
+
+//for jpa to recognize persistence.xml
+sourceSets.main.output.resourcesDir = sourceSets.main.output.classesDir
+
+repositories {    
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile "org.slf4j:slf4j-log4j12:1.7.25"
+    compile "log4j:log4j:1.2.17"
+    compile "log4j:apache-log4j-extras:1.2.17"
+    compile "commons-codec:commons-codec:1.10"
+    compile "net.sourceforge.jtds:jtds:1.3.1"
+
+    compile "org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final"
+    compile "org.hibernate:hibernate-core:5.2.10.Final"
+    compile "org.hibernate:hibernate-entitymanager:5.2.10.Final"
+    
+    testCompile "junit:junit:4.12"
+}
+
+
+eclipse {
+    classpath {
+        
+        /*
+            0. This is the default behavior, https://docs.gradle.org/current/dsl/org.gradle.plugins.ide.eclipse.model.EclipseClasspath.html#org.gradle.plugins.ide.eclipse.model.EclipseClasspath:downloadSources 
+            1. If not works, try to clear /~[user]/.gradle/caches/*.*                
+        */
+        downloadSources = true        
+        downloadJavadoc = true
+    }
+}
